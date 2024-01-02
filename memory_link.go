@@ -5,19 +5,19 @@ import (
 	"time"
 )
 
-type Person struct {
+type UserPerson struct {
 	Name        string
 	Age         int
 	lastVisited time.Time
 }
 
-func UpdatePersonWithLastVisited(d *Person) {
+func UpdatePersonWithLastVisited(d *UserPerson) {
 	d.lastVisited = time.Now()
 }
 
 func main() {
-	// использование в другом пакете
-	d := Person{
+	// UserPerson в другом пакете
+	d := UserPerson{
 		Name: "Alex",
 		Age:  25,
 	}
@@ -62,7 +62,7 @@ func main() {
 	}
 
 	increment := func(i *int) {
-		(*i)++
+		*i++
 	}
 
 	i := 42
