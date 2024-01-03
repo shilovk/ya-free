@@ -62,6 +62,32 @@ func FibIter(n int) int {
 	return a
 }
 
+func Say(animal string) (v string) {
+	switch animal {
+	default:
+		v = "heh"
+	case "dog":
+		v = "gav"
+	case "cat":
+		v = "myau"
+	case "cow":
+		v = "mu"
+	}
+	return
+}
+
+// Print Можно написать функцию высшего порядка с параметром такого типа:
+func Print(who string, how func(string) string) {
+	fmt.Println(how(who))
+}
+
+func Do(say bool) func(string) string {
+	if say {
+		return Say
+	}
+	return func(s string) string { return s }
+}
+
 func main() {
 	n := 5
 	// n копируется в переменную x
@@ -80,4 +106,16 @@ func main() {
 
 	fmt.Println(Fib(14))
 	fmt.Println(FibIter(14))
+
+	var voice func(string) string
+	voice = Say
+	fmt.Println(voice("cat"))
+
+	Print("dog", Say)
+
+	f1 := func(s string) string { return s }
+	fmt.Println(f1("123"))
+	Print("heh", func(s string) string { return s })
+
+	Print("dog", Do(true))
 }
