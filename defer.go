@@ -37,6 +37,8 @@ func PanicingFunc() {
 
 }
 
+var Global = 5
+
 func main() {
 	EvaluationOrder()
 	//evaluated
@@ -81,4 +83,40 @@ func main() {
 	VeryLongTimeFunction()
 
 	PanicingFunc()
+
+	fmt.Println(unintuitive())
+	fmt.Println(intuitive())
+
+	fmt.Println(Global)
+	UseGlobal()
+	fmt.Println(Global)
+}
+
+// В чём разница? В первом случае функция возвращает переменную value.
+// При вычислении операнда return ей действительно
+// присваивается значение "Казалось бы",
+// но эта переменная захвачена замыканием и изменяется в нём. После чего она и возвращается из функции.
+// На самом деле
+func unintuitive() (value string) {
+	defer func() { value = "На самом деле" }() // круглые скобки в конце означают, что функция вызывается
+	return "Казалось бы"
+}
+
+// Во втором случае у нас есть некоторая скрытая переменная ret1,
+// в которую при вызове оператора return копируется значение её операнда.
+// После любые действия с value уже не будут важны.
+// Казалось бы
+func intuitive() string {
+	value := "Казалось бы"
+	defer func() { value = "На самом деле" }()
+	return value
+}
+
+func UseGlobal() {
+	defer func(checkout int) {
+		Global = checkout // присваиваем Global значение аргумента
+	}(Global) // копируем значение Global в аргументы функции
+	Global = 42 // Изменяем Global
+	fmt.Println(Global)
+	// Здесь будет вызвана отложенная функция
 }
